@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Monitoring Tool</title>
+   <link runat="server" rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+   <link runat="server" rel="icon" href="favicon.ico" type="image/ico" />
+   @Styles.Render("~/Content/css")
+   @Scripts.Render("~/bundles/modernizr")
+   @Scripts.Render("~/bundles/jquery")
+</head>
+<body>
+    <script>
+        $(document).ready(function () {
+            $("#rangeStart").mask("99/99/9999");
+            $("#rangeEnd").mask("99/99/9999");
+        });
+
+        function confirmUpdate() {
+            $('#configuration').modal('hide');
+            $.notify({
+                message: "<strong>Configuration updated</strong> ",
+                icon: 'glyphicon glyphicon-star',
+            }, {
+                type: 'success',
+                placement: {
+                    from: "top",
+                    align: "right"
+                },
+                delay:1000
+            });
+        }
+    </script>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div>
+            <div class="navbar-header">
+                <img src="favicon.ico" class="navbar-center-icon" />
+                <span class="navbar-text"><b>InfoShare Monitoring Tool</b></span>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" style="float:right; margin:10px;" data-toggle="modal" data-target="#configuration">Configure</button>
+        </div>
+    </div>
+    <div id="wrapper">
+        <div id="sidebar-wrapper" class="!navbar-inverse" style="padding-bottom: 40px;">
+            <div class="container">
+                <div class="row side-bar-header">
+                    <div class="col-md-8">
+                        <span>Categories list</span>
+                    </div>
+                    <div id="menu-toggle" class="col-md-4">
+                        <span id="main_icon" class="navbar-icon fa fa-bars icon"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="groupTree" class="col-md-12"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        <div>
+            @RenderBody()
+        </div>
+        <div class="footer text-center">
+            <footer>
+                <p>&copy; @DateTime.Now.Year - InfoShare Monitoring Tool</p>
+            </footer>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="configuration">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">InfoShare Monitoring Tool Configuration</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="api/CategoryApi/PostConfigure" method="post" onsubmit="confirmUpdate()">
+                        <p><input class="form-control input-sm" type="text" name="rangeStart" id="rangeStart" placeholder="Statistics Range Start" required /></p>
+                        <p><input class="form-control input-sm" type="text" name="rangeEnd" id="rangeEnd" placeholder="Statistics Range End" required /></p>
+                        <div class="modal-footer">
+                            <input type="submit" value="Save configuration" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+   @Scripts.Render("~/bundles/bootstrap")
+   @Scripts.Render("~/bundles/chart")
+   @Scripts.Render("~/bundles/sideBar")
+   @Scripts.Render("~/bundles/jsTree")
+   @Scripts.Render("~/bundles/tabs")
+   @RenderSection("scripts", required: false)
+</body>
+</html>
